@@ -9,4 +9,6 @@
     <color name="amarilloClaro">#EEEA4C</color>
     <color name="negro">#000000</color>
     <color name="blanco">#ffffff</color>
+    <color name="moradoClaro">#A846E7</color>
+    <color name="moradoOscuro">#4B197A</color>
 </resources>

@@ -1,23 +1,24 @@
 package com.example.manue.wheredoifall2;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
-
 import com.github.chrisbanes.photoview.PhotoView;
-
 import java.util.Random;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     CircleImageView circleImageView;
     Toast toast = null;
     private MediaPlayer mediaPlayer;
+    AlertDialog.Builder alert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity
         circleImageView.setVisibility(View.GONE);
 
         mediaPlayer = MediaPlayer.create(getApplicationContext() , R.raw.drop);
+
+        alert = new AlertDialog.Builder(this);
     }
 
     @Override
@@ -102,7 +106,7 @@ public class MainActivity extends AppCompatActivity
 
         circleImageView.setImageResource(id);
         circleImageView.setVisibility(View.VISIBLE);
-        verToast(zonas[valor],this);
+        //verToast(zonas[valor],this);
         reproducirAudio();
     }
 
@@ -121,5 +125,34 @@ public class MainActivity extends AppCompatActivity
         }else{
             mediaPlayer.start();
         }
+    }
+
+    private void crearDialog(){
+        final EditText edittext = new EditText(this);
+        alert.setMessage("Enter Your Message");
+        alert.setTitle("Enter Your Title");
+
+        alert.setView(edittext);
+
+        alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //What ever you want to do with the value
+                //Editable YouEditTextValue = edittext.getText();
+                //OR
+                //String YouEditTextValue = edittext.getText().toString();
+            }
+        });
+
+        alert.setNegativeButton("No Option", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // what ever you want to do with No option.
+            }
+        });
+
+        alert.show();
+    }
+
+    public void clearAllMethod(View view) {
+        circleImageView.setVisibility(View.GONE);
     }
 }

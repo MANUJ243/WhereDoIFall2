@@ -33,6 +33,7 @@
         android:fontFamily="@font/burbank"
         android:text="@string/boton2Text"
         android:textSize="26sp"
+        android:onClick="clearAllMethod"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
