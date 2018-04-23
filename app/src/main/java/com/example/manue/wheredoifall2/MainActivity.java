@@ -9,13 +9,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.github.chrisbanes.photoview.PhotoView;
+
+import java.util.Random;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     PhotoView photoView;
+    String[] zonas = {"anarchyacres","dustydepot","fatalfields","flushfactory","greasygrove",
+            "hauntedhills","junkjuction","lonelylodge","lootlake","moistymire","pleasantpark",
+            "retailrow","saltysprings","shiftyshafts","snobbyshores","titledtowers","tomatotown",
+            "wailingwoods"};
+    CircleImageView circleImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +45,9 @@ public class MainActivity extends AppCompatActivity
 
         photoView = (PhotoView) findViewById(R.id.mapa);
         photoView.setImageResource(R.drawable.mapa);
+
+        circleImageView = findViewById(R.id.mapaZona);
+        circleImageView.setVisibility(View.GONE);
     }
 
     @Override
@@ -72,5 +85,15 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void generateMethod(View view) {
+        Random r = new Random();
+        int valor = r.nextInt(17)+1;  // Entre 0 y 17, más 1.
+
+        int id = getResources().getIdentifier(getPackageName()+":drawable/" + zonas[valor], null, null);
+
+        circleImageView.setImageResource(id);
+        circleImageView.setVisibility(View.VISIBLE);
     }
 }
