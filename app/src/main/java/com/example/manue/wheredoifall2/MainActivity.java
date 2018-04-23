@@ -1,5 +1,7 @@
 package com.example.manue.wheredoifall2;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -22,10 +25,12 @@ public class MainActivity extends AppCompatActivity
 
     PhotoView photoView;
     String[] zonas = {"anarchyacres","dustydepot","fatalfields","flushfactory","greasygrove",
-            "hauntedhills","junkjuction","lonelylodge","lootlake","moistymire","pleasantpark",
-            "retailrow","saltysprings","shiftyshafts","snobbyshores","titledtowers","tomatotown",
+            "hauntedhills","junkjunction","lonelylodge","lootlake","moistymire","pleasantpark",
+            "retailrow","saltysprings","shiftyshafts","snobbyshores","tiltedtowers","tomatotown",
             "wailingwoods"};
     CircleImageView circleImageView;
+    Toast toast = null;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,8 @@ public class MainActivity extends AppCompatActivity
 
         circleImageView = findViewById(R.id.mapaZona);
         circleImageView.setVisibility(View.GONE);
+
+        mediaPlayer = MediaPlayer.create(getApplicationContext() , R.raw.drop);
     }
 
     @Override
@@ -95,5 +102,24 @@ public class MainActivity extends AppCompatActivity
 
         circleImageView.setImageResource(id);
         circleImageView.setVisibility(View.VISIBLE);
+        verToast(zonas[valor],this);
+        reproducirAudio();
+    }
+
+    private void verToast(String texto, Context context) {                  //muestro toast solo en el caso de que no esto otro abierto
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(context, texto, Toast.LENGTH_SHORT);
+        toast.show();                                                       //si hay otro abierto lo cancelo y muestro el siguiente toast
+    }
+
+    private void reproducirAudio() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.seekTo(0);
+            mediaPlayer.start();
+        }else{
+            mediaPlayer.start();
+        }
     }
 }
