@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     private MediaPlayer mediaPlayer;
     AlertDialog.Builder alert;
     private RequestQueue requestQueue;
+    //EditText textoPrueba;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         alert = new AlertDialog.Builder(this);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
+        //textoPrueba = findViewById(R.id.textoPrueba);
     }
 
     @Override
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        //textoPrueba.setText(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
