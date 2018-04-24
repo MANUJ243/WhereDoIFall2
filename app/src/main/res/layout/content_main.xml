@@ -19,6 +19,7 @@
         android:backgroundTint="@color/amarilloClaro"
         android:fontFamily="@font/burbank"
         android:text="@string/boton1Text"
+        android:onClick="topSitesMethod"
         android:textSize="26sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

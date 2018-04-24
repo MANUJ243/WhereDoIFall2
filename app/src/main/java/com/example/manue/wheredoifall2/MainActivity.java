@@ -11,13 +11,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.github.chrisbanes.photoview.PhotoView;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -33,6 +43,7 @@ public class MainActivity extends AppCompatActivity
     Toast toast = null;
     private MediaPlayer mediaPlayer;
     AlertDialog.Builder alert;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         mediaPlayer = MediaPlayer.create(getApplicationContext() , R.raw.drop);
 
         alert = new AlertDialog.Builder(this);
+
+        requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
     @Override
@@ -154,5 +167,34 @@ public class MainActivity extends AppCompatActivity
 
     public void clearAllMethod(View view) {
         circleImageView.setVisibility(View.GONE);
+    }
+
+    public void callingApi(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://api.fortnitetracker.com/v1/profile/pc/MANUJ243",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Error--> ",error.toString());
+                Toast.makeText(getApplicationContext(),"Error con las estadisticas",Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("TRN-Api-Key", "737bca26-81b4-4925-a917-d295956102bb");
+                return headers;
+            }
+        };
+
+        requestQueue.add(stringRequest);
+    }
+
+    public void topSitesMethod(View view) {
+        callingApi();
     }
 }
