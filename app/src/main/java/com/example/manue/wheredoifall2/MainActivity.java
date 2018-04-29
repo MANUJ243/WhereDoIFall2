@@ -11,12 +11,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -26,6 +26,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.chrisbanes.photoview.PhotoView;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -44,7 +47,8 @@ public class MainActivity extends AppCompatActivity
     private MediaPlayer mediaPlayer;
     AlertDialog.Builder alert;
     private RequestQueue requestQueue;
-    //EditText textoPrueba;
+    JSONObject first;
+    TextView nombre, wins, matches, kills, kd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,14 @@ public class MainActivity extends AppCompatActivity
         alert = new AlertDialog.Builder(this);
 
         requestQueue = Volley.newRequestQueue(getApplicationContext());
-        //textoPrueba = findViewById(R.id.textoPrueba);
+
+        View inflatedView = getLayoutInflater().inflate(R.layout.nav_header_main, null);
+
+        nombre = inflatedView.findViewById(R.id.profile_name);
+        wins = inflatedView.findViewById(R.id.wins);
+        matches = inflatedView.findViewById(R.id.matches);
+        kills = inflatedView.findViewById(R.id.kills);
+        kd = inflatedView.findViewById(R.id.kd);
     }
 
     @Override
@@ -176,8 +187,13 @@ public class MainActivity extends AppCompatActivity
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getApplicationContext(),response,Toast.LENGTH_LONG).show();
                         //textoPrueba.setText(response);
+                        try {
+                            first = new JSONObject(response);
+                        } catch (JSONException e) {
+                        }
+                        controlDatosRespuesta();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -199,5 +215,40 @@ public class MainActivity extends AppCompatActivity
 
     public void topSitesMethod(View view) {
         callingApi();
+    }
+
+    public void controlDatosRespuesta(){
+        String matchesT ="", winsT="", killsT="", kdT="";
+
+        try {
+            JSONArray lifeTimeStats = first.getJSONArray("lifeTimeStats");
+
+            for (int i = 0; i < lifeTimeStats.length(); i++) {
+                JSONObject jsonObject = lifeTimeStats.getJSONObject(i);
+
+                switch (jsonObject.getString("key")) {
+                    case "Matches Played":
+                        matchesT = jsonObject.getString("value");
+                        break;
+                    case "Wins":
+                        winsT = jsonObject.getString("value");
+                        break;
+                    case "Kills":
+                        killsT = jsonObject.getString("value");
+                        break;
+                    case "K/d":
+                        kdT = jsonObject.getString("value");
+                        break;
+                }
+            }
+        } catch (JSONException e) {
+        }
+
+        Toast.makeText(getApplicationContext(),winsT,Toast.LENGTH_LONG).show();
+
+        wins.setText("Wins: " + winsT);
+        matches.setText("Matches: "+matchesT);
+        kills.setText("Kills: "+killsT);
+        kd.setText("K/d: "+kdT);
     }
 }
