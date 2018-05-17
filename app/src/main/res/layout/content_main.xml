@@ -20,6 +20,7 @@
         android:fontFamily="@font/burbank"
         android:text="@string/boton1Text"
         android:onClick="topSitesMethod"
+        android:visibility="invisible"
         android:textSize="26sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,16 +30,18 @@
         android:layout_width="170dp"
         android:layout_height="56dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:backgroundTint="@color/amarilloClaro"
         android:fontFamily="@font/burbank"
+        android:onClick="clearAllMethod"
         android:text="@string/boton2Text"
         android:textSize="26sp"
-        android:onClick="clearAllMethod"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <ImageView
         android:id="@+id/mapa"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -62,7 +65,7 @@
         android:textSize="40sp"
         android:textColor="@color/blanco"
         android:backgroundTint="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mapa"
@@ -84,5 +87,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.25" />
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        ads:layout_constraintBottom_toBottomOf="parent"
+        ads:layout_constraintEnd_toEndOf="parent"
+        ads:layout_constraintStart_toStartOf="parent">
+    </com.google.android.gms.ads.AdView>
 
 </android.support.constraint.ConstraintLayout>

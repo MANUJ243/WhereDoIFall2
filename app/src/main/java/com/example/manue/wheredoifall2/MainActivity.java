@@ -1,5 +1,6 @@
 package com.example.manue.wheredoifall2;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
@@ -16,8 +17,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.ablanco.zoomy.Zoomy;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,7 +29,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.github.chrisbanes.photoview.PhotoView;
+//import com.github.chrisbanes.photoview.PhotoView;
+//import com.bogdwellers.pinchtozoom.ImageMatrixTouchHandler;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,7 +47,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    PhotoView photoView;
+    //PhotoView photoView;
+    ImageView photoView;
+    AdView banner;
+    InterstitialAd mInterstitialAd;
     String[] zonas = {"anarchyacres","dustydepot","fatalfields","flushfactory","greasygrove",
             "hauntedhills","junkjunction","lonelylodge","lootlake","moistymire","pleasantpark",
             "retailrow","saltysprings","shiftyshafts","snobbyshores","tiltedtowers","tomatotown",
@@ -49,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private RequestQueue requestQueue;
     JSONObject first;
     TextView nombre, wins, matches, kills, kd;
+    int contAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +80,11 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        photoView = (PhotoView) findViewById(R.id.mapa);
-        photoView.setImageResource(R.drawable.mapa);
+        photoView = (ImageView) findViewById(R.id.mapa);
+        //photoView.setImageResource(R.drawable.mapa);
+        //photoView.setOnTouchListener(new ImageMatrixTouchHandler(getApplicationContext()));
+        Zoomy.Builder builder = new Zoomy.Builder(this).target(photoView);
+        builder.register();
 
         circleImageView = findViewById(R.id.mapaZona);
         circleImageView.setVisibility(View.GONE);
@@ -81,10 +98,22 @@ public class MainActivity extends AppCompatActivity
         View inflatedView = getLayoutInflater().inflate(R.layout.nav_header_main, null);
 
         nombre = inflatedView.findViewById(R.id.profile_name);
-        wins = inflatedView.findViewById(R.id.wins);
-        matches = inflatedView.findViewById(R.id.matches);
-        kills = inflatedView.findViewById(R.id.kills);
-        kd = inflatedView.findViewById(R.id.kd);
+        //wins = inflatedView.findViewById(R.id.wins);
+        //matches = inflatedView.findViewById(R.id.matches);
+        //kills = inflatedView.findViewById(R.id.kills);
+        //kd = inflatedView.findViewById(R.id.kd);
+
+        MobileAds.initialize(this, "ca-app-pub-8810149351311606~4217893565");
+
+        banner = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        banner.loadAd(adRequest);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        contAdd = 0;
     }
 
     @Override
@@ -134,6 +163,16 @@ public class MainActivity extends AppCompatActivity
         circleImageView.setVisibility(View.VISIBLE);
         //verToast(zonas[valor],this);
         reproducirAudio();
+        showIntersticialAdd();
+    }
+
+    private void showIntersticialAdd(){
+        contAdd++;
+
+        if (contAdd == 5) {
+            contAdd = 0;
+            mInterstitialAd.show();
+        }
     }
 
     private void verToast(String texto, Context context) {                  //muestro toast solo en el caso de que no esto otro abierto
