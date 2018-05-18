@@ -1,4 +1,4 @@
-package com.example.manue.wheredoifall2;
+package com.modified.manue.wheredoifall2;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
