@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity
         banner.loadAd(adRequest);
 
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+        mInterstitialAd.setAdUnitId("ca-app-pub-8810149351311606/3970196147");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         contAdd = 0;
@@ -172,6 +172,7 @@ public class MainActivity extends AppCompatActivity
         if (contAdd == 5) {
             contAdd = 0;
             mInterstitialAd.show();
+            mInterstitialAd.loadAd(new AdRequest.Builder().build());
         }
     }
 
